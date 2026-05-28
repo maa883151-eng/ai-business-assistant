@@ -103,7 +103,7 @@ async function assertInvoiceNumberAvailable(
 
 export const invoiceService = {
   async create(userId: string, payload: unknown) {
-    const data = createInvoiceSchema.parse(payload);
+    const data = createInvoiceSchema.parse(payload) as any;
 
     await assertUserOwnsClient(userId, data.clientId);
     await assertInvoiceNumberAvailable(userId, data.invoiceNumber);
@@ -128,7 +128,7 @@ export const invoiceService = {
   },
 
   async list(userId: string, query: unknown) {
-    const { page, limit, status } = listInvoicesQuerySchema.parse(query);
+    const { page, limit, status } = listInvoicesQuerySchema.parse(query) as any;
     const skip = (page - 1) * limit;
     const where = {
       userId,
@@ -171,7 +171,7 @@ export const invoiceService = {
   },
 
   async update(userId: string, invoiceId: string, payload: unknown) {
-    const data = updateInvoiceSchema.parse(payload);
+    const data = updateInvoiceSchema.parse(payload) as any;
     const currentInvoice = await this.getById(userId, invoiceId);
 
     if (data.clientId) {
